@@ -1,0 +1,55 @@
+# Unreal MCP Plugin for Claude Code
+
+Control Unreal Editor directly from Claude Code via MCP. Hundreds of tools exposed via EDA's ToolsetRegistry across 30+ toolsets: actors, blueprints, materials, Niagara, Control Rigs, State Trees, widgets, Gameplay Ability System, and more.
+
+## Prerequisites
+
+1. **Unreal Editor** with the **ModelContextProtocol** and **ClaudeCode** plugins enabled
+2. **Editor running** - the MCP server starts automatically (or on first Claude Code tab open)
+
+## Installation
+
+Add the plugin path to your project's `.claude/settings.json`:
+
+```json
+{
+  "plugins": ["/path/to/unreal-mcp-plugin"]
+}
+```
+
+Or in a Claude Code session, run:
+
+```
+/install-plugin /path/to/unreal-mcp-plugin
+```
+
+## Verification
+
+1. Launch Unreal Editor, open **Tools > Claude Code** to start the MCP server
+2. Check the Output Log for MCP server startup messages
+3. In Claude Code, run `/mcp`. You should see `unreal-mcp` listed as a connected server
+4. Try: "List all actors in the current level"
+
+## Configuration
+
+The default port is **8000** with URL path `/mcp`. If the port is in use, run `ModelContextProtocol.StartServer <port>` in the console with a different port number. The ClaudeCode plugin writes `.mcp.json` automatically on startup with the correct URL.
+
+## Security
+
+The MCP server runs on **localhost only** with origin validation. This is appropriate for local development.
+
+## What's Available
+
+All tools are auto-discovered by Claude Code via MCP. No manual configuration needed. Tools cover the full editor surface across these domains:
+
+- **Actors and Scene** - spawn, transform, inspect, and delete actors; manage components and outliner folders
+- **Blueprints** - create, edit graphs, add nodes, connect pins, manage variables, compile
+- **Assets and Content** - find, load, save, move, duplicate assets; edit Data Tables, Curve Tables, String Tables
+- **Materials** - author material graphs, create and configure material instances
+- **Meshes and Textures** - inspect/edit static and skeletal meshes, LODs, collisions, Nanite, sockets, bones
+- **Animation** - build Control Rigs, inspect State Trees and Behavior Trees
+- **VFX** - author Niagara systems and Dataflow graphs
+- **UI** - build UMG widget blueprints, automate Slate UI interaction
+- **Gameplay** - manage gameplay tags, inspect GAS state, create Game Feature Plugins, edit physics assets
+- **Editor** - screenshots, camera control, actor/asset selection, content browser, log inspection
+- **Scripting** - batch multiple tool calls into a single Python script execution

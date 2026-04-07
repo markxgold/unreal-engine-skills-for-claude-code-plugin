@@ -1,0 +1,9 @@
+{
+  "name": "unreal-mcp",
+  "version": "1.0.0",
+  "description": "Control Unreal Editor via MCP: create actors, edit Blueprints, manipulate widgets, materials, Niagara, Control Rigs, State Trees, and more.",
+  "author": {
+    "name": "Thomas Mansencal",
+    "email": "thomas.mansencal@epicgames.com"
+  }
+}
