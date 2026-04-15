@@ -1,6 +1,6 @@
 ---
 name: unreal-mcp
-description: "Control Unreal Editor via MCP: create actors, edit Blueprints, manipulate widgets, materials, Niagara, Control Rigs, and more"
+description: "Control Unreal Editor via MCP: create actors, edit Blueprints, manipulate widgets, materials, Niagara, Control Rigs, Sequencer, run automation tests, and more"
 ---
 
 # Unreal MCP
@@ -24,6 +24,28 @@ All tools are auto-discovered via MCP. You do not need to memorize tool names. T
 - **Check results.** Operations like Blueprint compilation can fail. Always check the result before proceeding.
 
 ## Workflows
+
+### Automation Testing
+
+1. `AutomationTestToolset.DiscoverTests` to initialize test discovery (call once before other test tools)
+2. `AutomationTestToolset.ListTests` to find tests by name or tag substring
+3. `AutomationTestToolset.RunTests` to execute specific tests by full path
+4. `AutomationTestToolset.GetTestStatus` for a lightweight progress snapshot
+5. `AutomationTestToolset.GetTestResults` for detailed per-test results, errors, and warnings
+6. `AutomationTestToolset.StopTests` to cancel running tests
+
+### Sequencer (Level Sequences)
+
+1. `SequencerTools.create_level_sequence` to create a new sequence asset
+2. `SequencerTools.open_sequence` to open it in the Sequencer editor
+3. `SequencerTools.add_actors_by_name` to bind level actors into the sequence
+4. `SequencerTools.add_track_to_binding` to add tracks (transform, animation, etc.)
+5. `SequencerTools.add_section` to add sections to tracks
+6. `SequencerTools.add_key_float` / `add_key_bool` / `add_key_integer` to keyframe values
+7. `SequencerTools.set_playback_range` to set the sequence duration
+8. `SequencerTools.create_camera` to add a cine camera
+9. `SequencerTools.set_playhead_frame` to scrub to a frame
+10. `SequencerTools.play` / `pause` for playback control
 
 ### Inspect a Level
 
@@ -138,6 +160,10 @@ All toolsets listed below are registered via EDA's ToolsetRegistry and grouped b
 
 **AIModuleToolset** inspects and navigates Behavior Trees: list nodes, get children, depths, decorators, blackboards, and subtree references.
 
+### Sequencer
+
+**SequencerTools** provides comprehensive Level Sequence editing: create and open sequences, manage bindings (possessables, spawnables, custom bindings), add tracks and sections, keyframe float/bool/integer/string channels, control playback (play, pause, scrub, loop, speed). Supports camera management (create cameras, camera cuts, lock to viewport), Control Rig integration (get/set control transforms, space switching, baking, tweening, layered mode, animation layers), FBX import/export, animation sequence export, marked frames/bookmarks, outliner node management (mute, solo, lock, pin, expand, deactivate), Curve Editor controls, section properties (blend type, completion mode, easing, conditions), track conditions, folder organization, selection management, and sub-sequence hierarchy navigation.
+
 ### VFX
 
 **NiagaraAIAssistantTools** provides full Niagara system authoring: create systems/emitters, add/remove modules and renderers, get/set stack inputs, manage user variables, query schemas, create Blueprint wrappers, and set component variables.
@@ -166,9 +192,13 @@ All toolsets listed below are registered via EDA's ToolsetRegistry and grouped b
 
 ### Editor Utilities
 
-**EditorAppToolset** handles editor interaction: capture asset images/viewport screenshots, get/set camera transform, select actors/assets, focus on actors, manage content browser path, screen-to-world coordinate conversion, search console variables, and get visible actors.
+**EditorAppToolset** handles editor interaction: capture asset images/viewport screenshots, capture full editor screenshots, get/set camera transform, select actors/assets, focus on actors, manage content browser path, screen-to-world and world-to-screen coordinate conversion, search console variables, get visible actors in the viewport frustum, get open assets and selected assets, and open asset editors.
+
+**PrintToLog** prints messages to the Unreal Output Log with configurable verbosity (Log, Warning, Error).
 
 **LogsToolset** provides log inspection: list log categories, get/filter log entries by category or regex pattern, and get/set verbosity levels.
+
+**AutomationTestToolset** runs C++ automation tests from the editor: discover available tests, list tests by name or tag filter, run specific tests by path, check status, get detailed per-test results (duration, errors, warnings), and stop running tests. Requires calling `DiscoverTests` once before using other test tools.
 
 **AgentSkillToolset** manages Agent Skills: list, get details, create, and update skill assets.
 
@@ -192,11 +222,12 @@ All toolsets listed below are registered via EDA's ToolsetRegistry and grouped b
 
 ### Console Commands
 
-| Command                                   | Description                                   |
-|-------------------------------------------|-----------------------------------------------|
-| `ModelContextProtocol.StartServer [port]` | Start the MCP server (optional port override) |
-| `ModelContextProtocol.StopServer`         | Stop the MCP server                           |
-| `ModelContextProtocol.RefreshTools`       | Re-register all tools                         |
+| Command                                     | Description                                   |
+|---------------------------------------------|-----------------------------------------------|
+| `ModelContextProtocol.StartServer [port]`   | Start the MCP server (optional port override) |
+| `ModelContextProtocol.StopServer`           | Stop the MCP server                           |
+| `ModelContextProtocol.RefreshTools`         | Re-register all tools                         |
+| `ModelContextProtocol.GenerateClientConfig` | Generate MCP client configuration file        |
 
 ## Troubleshooting
 
